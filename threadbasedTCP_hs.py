@@ -22,7 +22,6 @@ class TcpHandshake(threading.Thread):
         self.src = self.l4.src
         self.swin = self.l4[TCP].window
         self.dwin=1
-        self.fullpayload=0
 
         self.ThreeWHS_Event=threading.Event()
         logger.debug("init: %s"%repr(target))
@@ -38,17 +37,17 @@ class TcpHandshake(threading.Thread):
     def _sniff(self):
         def handle_recv(pkt):
             if pkt and pkt.haslayer(IP) and pkt.haslayer(TCP):
-               if pkt[TCP].flags & 0x3f == 0x12:   	# SYN+ACK
+               if pkt[TCP].flags & 0x3f == 0x12:   	    # SYN+ACK
                   logger.debug("RCV: SYN+ACK")
                   self.send_synack_ack(pkt)
                   self.ThreeWHS_Event.set()
-               elif  pkt[TCP].flags & 4 != 0:      	# RST
+               elif  pkt[TCP].flags & 4 != 0:      	    # RST
                   logger.debug("RCV: RST")
                   raise Exception("RST")
                elif pkt[TCP].flags & 0x3f ==0x01:     	# FIN
                   logger.debug("RCV: FIN")
                   self.send_finack(pkt)
-               elif pkt[TCP].flags & 0x3f == 0x11: 	# FIN+ACK
+               elif pkt[TCP].flags & 0x3f == 0x11: 	    # FIN+ACK
                   logger.debug("RCV: FIN+ACK")
                   self.send_finack(pkt)
                elif (pkt[TCP].flags & 0x3f == 0x18) or (pkt[TCP].flags & 0x3f == 0x19) or (pkt[TCP].flags & 0x3f == 0x10):
