@@ -24,7 +24,7 @@ class TcpHandshake(threading.Thread):
         self.dwin=1
 
         self.ThreeWHS_Event=threading.Event()
-        logger.debug("init: %s"%repr(target))
+        logger.info("init: %s"%repr(target))
 
     def start(self):
         logger.debug("start")
