@@ -44,7 +44,7 @@ class TcpHandshake(threading.Thread):
                elif  pkt[TCP].flags & 4 != 0:      	    # RST
                   logger.debug("RCV: RST")
                   raise Exception("RST")
-               elif pkt[TCP].flags & 0x3f ==0x01:     	# FIN
+               elif pkt[TCP].flags & 0x3f ==0x01:     	    # FIN
                   logger.debug("RCV: FIN")
                   self.send_finack(pkt)
                elif pkt[TCP].flags & 0x3f == 0x11: 	    # FIN+ACK
